@@ -20,14 +20,13 @@ code {
 	border: 2px solid rgb(70, 70, 70);
 	border-radius: 5px;
     padding: 2.5px 0px;
-	width: 500px;
 	text-align: center;
 }
 
 .grid-container {
 	display: grid;
 	grid-template-columns: 525px 525px 525px;
-	margin-left: 10em;
+	margin-left: 10em
 }
 
 div#footer {
@@ -111,4 +110,9 @@ a {
 
 .right-corner {
 	margin-right: 1em;
+}
+
+#letterButtons {
+	display: flex;
+	justify-content: center;
 }

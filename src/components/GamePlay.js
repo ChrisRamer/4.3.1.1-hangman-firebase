@@ -7,7 +7,7 @@ function GamePlay(props) {
 
 	return (
 		<React.Fragment>
-			<div class="gameplay">
+			<div className="gameplay">
 				<Image misses={props.misses} />
 				<GameResult sentence={props.sentence} lettersNotGuessed={props.lettersNotGuessed} onGuessedLetter={props.onGuessedLetter} misses={props.misses} />
 			</div>

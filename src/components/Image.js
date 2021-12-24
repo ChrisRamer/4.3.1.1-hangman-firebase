@@ -25,7 +25,7 @@ function Image(props) {
 
 	return (
 		<React.Fragment>
-			<div class="image">
+			<div className="image">
 				<img src={getImage()} alt={`You have made ${props.misses} incorrect guesses}`} />
 			</div>
 		</React.Fragment>

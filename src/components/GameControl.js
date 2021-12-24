@@ -13,7 +13,7 @@ class AppControl extends React.Component {
 			lettersNotGuessed: [
 				"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
 			],
-			currentImage: 0
+			misses: 0
 		};
 	}
 
@@ -52,6 +52,12 @@ class AppControl extends React.Component {
 		if (this.state.selectedSentence.toUpperCase().includes(letterGuessed)) {
 			console.log("Guessed correctly!");
 		} else {
+			const newMisses = this.state.misses + 1;
+
+			this.setState({
+				misses: newMisses
+			})
+
 			console.log("Guessed incorrectly!");
 		}
 	}
@@ -62,7 +68,7 @@ class AppControl extends React.Component {
 		if (this.state.inGameSetup) {
 			currentlyVisibleState = <GameSetup onNewGameCreation={this.handleStartingNewGame}  />;
 		} else {
-			currentlyVisibleState = <GamePlay sentence={this.state.selectedSentence} lettersNotGuessed={this.state.lettersNotGuessed} onGuessedLetter={this.handleGuessingLetter} />;
+			currentlyVisibleState = <GamePlay sentence={this.state.selectedSentence} lettersNotGuessed={this.state.lettersNotGuessed} onGuessedLetter={this.handleGuessingLetter} misses={this.state.misses} />;
 		}
 
 		return (

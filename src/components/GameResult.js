@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import LetterButtonList from "./LetterButtonList";
 
 function GameResult(props) {
 	function formatDisplayedSentence() {
@@ -14,17 +15,12 @@ function GameResult(props) {
 
 	function getResult() {
 		if (props.misses < 6) {
-			return <div class="panel">
+			return <div className="panel">
 				<p>{formatDisplayedSentence()}</p>
-
-				<div className="letterButtons">
-					{props.lettersNotGuessed.map((letter, index) =>
-						<button key={index} type="submit" onClick={() => props.onGuessedLetter(letter)}>{letter}</button>
-					)}
-				</div>
+				<LetterButtonList lettersNotGuessed={props.lettersNotGuessed} onGuessedLetter={props.onGuessedLetter} />
 			</div>
 		} else {
-			return <div class="panel">
+			return <div className="panel">
 				<p>Ohno! You lost!</p>
 				<p>The sentence was <b>{props.sentence}</b></p>
 			</div>

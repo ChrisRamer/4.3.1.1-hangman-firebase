@@ -3,9 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
+import { createStore } from "redux";
+import reducer from "./reducers/gameplay-reducer";
+
+const store = createStore(reducer);
+console.log(store.getState());
 
 ReactDOM.render(
-	<App />,
+	<Provider store={store}>
+		<App />
+	</Provider>,
   	document.getElementById('root')
 );
 

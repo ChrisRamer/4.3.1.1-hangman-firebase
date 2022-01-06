@@ -1,19 +1,14 @@
 import React from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import GamePlay from "./GamePlay";
 import GameSetup from "./GameSetup";
 
-class AppControl extends React.Component {
+class GameControl extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			inGameSetup: true,
-			currentGame: null,
-			gameState: "NOT_STARTED",
-			selectedSentence: null,
-			lettersNotGuessed: [
-				"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-			],
-			misses: 0
+			inGameSetup: true
 		};
 	}
 
@@ -33,33 +28,34 @@ class AppControl extends React.Component {
 		return selectedSentence;
 	}
 
-	handleStartingNewGame = (newGame) => {
-		this.setState({
-			currentGame: newGame,
-			selectedSentence: this.getSentence(newGame.wordCount),
-			inGameSetup: false
-		});
+	handleStartingNewGame = (wordCount) => {
+		const { dispatch } = this.props;
+		const action = {
+			type: "GAME_START",
+			selectedSentence: this.getSentence(wordCount.wordCount)
+		}
+		dispatch(action);
+		this.setState({ inGameSetup: false });
 	}
 
 	handleGuessingLetter = (letterGuessed) => {
-		console.log("Guessed letter " + letterGuessed + "!");
-		const newLettersNotGussed = this.state.lettersNotGuessed.filter(x => x !== letterGuessed);
+		const lettersNotGuessed = this.props.lettersNotGuessed == null ? [
+			"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+		] : this.props.lettersNotGuessed;
+		const newLettersNotGussed = lettersNotGuessed.filter(x => x !== letterGuessed);
+		let newMisses = this.props.misses == null ? 0 : this.props.misses;
 
-		this.setState({
-			lettersNotGuessed: newLettersNotGussed
-		});
-
-		if (this.state.selectedSentence.toUpperCase().includes(letterGuessed)) {
-			console.log("Guessed correctly!");
-		} else {
-			const newMisses = this.state.misses + 1;
-
-			this.setState({
-				misses: newMisses
-			})
-
-			console.log("Guessed incorrectly!");
+		if (!this.props.selectedSentence.toUpperCase().includes(letterGuessed)) {
+			newMisses = newMisses + 1;
 		}
+
+		const { dispatch } = this.props;
+		const action = {
+			type: "GUESS_LETTER",
+			lettersNotGuessed: newLettersNotGussed,
+			misses: newMisses
+		}
+		dispatch(action);
 	}
 
 	render() {
@@ -68,7 +64,10 @@ class AppControl extends React.Component {
 		if (this.state.inGameSetup) {
 			currentlyVisibleState = <GameSetup onNewGameCreation={this.handleStartingNewGame}  />;
 		} else {
-			currentlyVisibleState = <GamePlay sentence={this.state.selectedSentence} lettersNotGuessed={this.state.lettersNotGuessed} onGuessedLetter={this.handleGuessingLetter} misses={this.state.misses} />;
+			const defaultLettersNotGuessed = [
+				"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+			];
+			currentlyVisibleState = <GamePlay sentence={this.props.selectedSentence} lettersNotGuessed={this.props.lettersNotGuessed || defaultLettersNotGuessed} onGuessedLetter={this.handleGuessingLetter} misses={this.props.misses || 0} />;
 		}
 
 		return (
@@ -79,4 +78,20 @@ class AppControl extends React.Component {
 	}
 }
 
-export default AppControl;
+GameControl.propTypes = {
+	selectedSentence: PropTypes.string,
+	lettersNotGuessed: PropTypes.array,
+	misses: PropTypes.number
+}
+
+const mapStateToProps = state => {
+	return {
+		selectedSentence: state.gameReducer.selectedSentence,
+		lettersNotGuessed: state.gameplayReducer.lettersNotGuessed,
+		misses: state.gameplayReducer.misses
+	}
+}
+
+GameControl = connect(mapStateToProps)(GameControl);
+
+export default GameControl;

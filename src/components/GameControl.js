@@ -32,7 +32,7 @@ class GameControl extends React.Component {
 		const { dispatch } = this.props;
 		const action = {
 			type: "GAME_START",
-			selectedSentence: this.getSentence(wordCount.wordCount)
+			selectedSentence: this.getSentence(wordCount)
 		}
 		dispatch(action);
 		this.setState({ inGameSetup: false });

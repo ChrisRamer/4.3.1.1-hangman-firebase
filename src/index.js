@@ -12,10 +12,11 @@ import firebase from './firebase';
 
 const store = createStore(rootReducer);
 
+console.log(store);
+
 const rrfProps = {
 	firebase,
 	config: {
-		userProfile: "users"
 	},
 	dispatch: store.dispatch,
 	createFirestoreInstance
